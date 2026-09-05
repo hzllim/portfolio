@@ -1,0 +1,393 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+
+// Fetch singleton about data for author identity and social links
+const aboutEntries = await getCollection('about');
+const aboutData = aboutEntries.length > 0 ? aboutEntries[0].data : null;
+
+const authorName = aboutData?.name || 'Hazel';
+const pageTitle = title || `${authorName} • Product Designer`;
+const pageDescription =
+  description ||
+  aboutData?.tagline ||
+  'Product designer crafting digital experiences that turn complexity into clarity, helping users navigate products with confidence and delight.';
+
+const socialLinks = aboutData?.socialLinks || [];
+const email = aboutData?.email || 'hello@example.com';
+const brandInitial = authorName ? authorName.charAt(0).toUpperCase() : 'H';
+
+function normalizeUrl(url: string = '') {
+  if (!url) return '#';
+  const trimmed = url.trim();
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('mailto:')) {
+    return trimmed;
+  }
+  return `https://${trimmed}`;
+}
+
+function getPlatformKey(platform: string = '', url: string = '') {
+  const p = (platform || '').toLowerCase().trim();
+  const u = (url || '').toLowerCase().trim();
+  if (p.includes('linkedin') || u.includes('linkedin.com')) return 'linkedin';
+  if (p.includes('dribbble') || u.includes('dribbble.com')) return 'dribbble';
+  if (p.includes('behance') || u.includes('behance.net')) return 'behance';
+  if (p.includes('figma') || u.includes('figma.com')) return 'figma';
+  if (p.includes('github') || u.includes('github.com')) return 'github';
+  if (p.includes('instagram') || u.includes('instagram.com')) return 'instagram';
+  if (p.includes('twitter') || p === 'x' || u.includes('twitter.com') || u.includes('x.com')) return 'x';
+  if (p.includes('medium') || u.includes('medium.com')) return 'medium';
+  if (p.includes('substack') || u.includes('substack.com')) return 'substack';
+  if (p.includes('mail') || u.startsWith('mailto:')) return 'email';
+  return 'generic';
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style is:global>
+      :root {
+        --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+        /* Warm, tactile editorial palette inspired by Buzz Usborne & Jolene Ng */
+        --color-bg: #FAF9F5;
+        --color-surface: #FFFFFF;
+        --color-surface-subtle: #F4F1EB;
+        --color-surface-hover: #ECE8DE;
+        --color-border: #E8E4DC;
+        --color-border-hover: #D6D0C4;
+
+        --color-text: #1C1917;
+        --color-text-secondary: #57534E;
+        --color-text-muted: #8E8880;
+
+        --color-accent: #0F172A;
+        --color-pill-bg: #F0EDE5;
+
+        --max-width: 880px;
+        --radius-lg: 20px;
+        --radius-md: 12px;
+        --radius-sm: 8px;
+        --radius-pill: 9999px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        line-height: 1.65;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      /* Navigation Header (scoped to .site-header) */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(250, 249, 245, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--color-border);
+        transition: border-color 0.2s ease;
+      }
+
+      .nav-container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 1.1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+
+      .brand-mark {
+        width: 32px;
+        height: 32px;
+        background: var(--color-text);
+        color: var(--color-bg);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.95rem;
+        letter-spacing: -0.03em;
+        transition: transform 0.2s ease;
+      }
+
+      .nav-brand:hover .brand-mark {
+        transform: rotate(-4deg) scale(1.04);
+      }
+
+      .brand-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: var(--color-text);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .nav-link {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--radius-pill);
+        transition: all 0.2s ease;
+      }
+
+      .nav-link:hover {
+        color: var(--color-text);
+        background: var(--color-surface-subtle);
+      }
+
+      .nav-cms-link {
+        font-size: 0.78rem;
+        font-family: var(--font-mono);
+        font-weight: 500;
+        padding: 0.35rem 0.75rem;
+        border-radius: var(--radius-pill);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        color: var(--color-text-muted);
+        margin-left: 0.25rem;
+        transition: all 0.2s ease;
+      }
+
+      .nav-cms-link:hover {
+        border-color: var(--color-text);
+        color: var(--color-text);
+      }
+
+      /* Main container */
+      main {
+        flex: 1;
+        max-width: var(--max-width);
+        width: 100%;
+        margin: 0 auto;
+        padding: 3.5rem 1.5rem 3rem;
+      }
+
+      /* Seamless Minimal Centered Footer (Jolene Ng aesthetic) */
+      .site-footer {
+        width: 100% !important;
+        margin-top: auto !important;
+        padding: 5rem 1.5rem 4rem !important;
+        background: transparent !important;
+        border: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .site-footer-inner {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        gap: 1.25rem !important;
+        margin: 0 auto !important;
+      }
+
+      .site-footer-socials {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 1.5rem !important;
+      }
+
+      .site-footer-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: var(--color-text) !important;
+        opacity: 0.7 !important;
+        transition: opacity 0.2s ease, transform 0.2s ease !important;
+        padding: 0.3rem !important;
+      }
+
+      .site-footer-icon:hover {
+        opacity: 1 !important;
+        transform: translateY(-2px) !important;
+      }
+
+      .site-footer-copy {
+        font-size: 0.85rem !important;
+        color: var(--color-text-muted) !important;
+        letter-spacing: -0.01em !important;
+        margin: 0 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="nav-container">
+        <a href="/" class="nav-brand">
+          <div class="brand-mark">{brandInitial}</div>
+          <span class="brand-title">{authorName}</span>
+        </a>
+        <nav class="nav-links">
+          <a href="/" class="nav-link">Work</a>
+          <a href="/about" class="nav-link">About</a>
+          <a href="/contact" class="nav-link">Contact</a>
+          <a href="/admin" class="nav-cms-link" title="Access Keystatic CMS">CMS ↗</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <!-- Clean Social Icons Row directly in the center -->
+        {socialLinks.length > 0 || email ? (
+          <div class="site-footer-socials">
+            {socialLinks.map((item) => {
+              const platformKey = getPlatformKey(item.platform, item.url);
+              const href = normalizeUrl(item.url);
+              return (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="site-footer-icon"
+                  title={item.platform || 'Social Link'}
+                  aria-label={item.platform || 'Social Link'}
+                >
+                  {platformKey === 'linkedin' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64a1.64 1.64 0 1 0 1.64 1.64 1.64 1.64 0 0 0-1.64-1.64Z"/>
+                    </svg>
+                  )}
+                  {platformKey === 'dribbble' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 0 1 1.93 5.312c-.27-.054-2.484-.46-4.75-.208a16.42 16.42 0 0 1-.52-1.22c-.3-.807-.638-1.636-1.01-2.463 2.585-1.026 4.103-1.37 4.35-1.421zm-6.02 2.052c.365.81.696 1.62.99 2.408-2.68.802-5.75.823-6.14.823-.05 0-.09 0-.13-.002a8.544 8.544 0 0 1 1.34-3.694c.16.096 1.83 1.01 3.94.465zm-7.1 5.338c.32 0 3.03-.01 5.56-.73.23.63.45 1.25.63 1.87-3.95 1.2-5.46 3.65-5.6 3.88a8.536 8.536 0 0 1-.59-5.02zm6.65 6.062c.11-.18 1.43-2.34 5.17-3.47.78 2.04 1.12 3.9 1.22 4.49a8.495 8.495 0 0 1-6.39-1.02zm7.74-1.64c-.11-.53-.44-2.28-1.18-4.22 2.1-.28 3.93.18 4.18.25a8.505 8.505 0 0 1-3 3.97z"/>
+                    </svg>
+                  )}
+                  {platformKey === 'behance' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-4.971 3-3.459 0-5.694-2.409-5.694-5.918 0-3.628 2.378-5.978 5.75-5.978 3.325 0 5.342 2.251 5.342 5.679 0 .524-.077 1.155-.077 1.155h-8.08c.093 1.624 1.254 2.872 3.031 2.872 1.488 0 2.348-.68 2.766-1.571l1.933.761zm-4.949-4.739c-.046-1.225-.794-2.153-2.028-2.153-1.218 0-1.956.885-2.083 2.153h4.111zm-11.777-7.261h-7v14h7.091c3.084 0 4.909-1.545 4.909-3.909 0-1.464-.818-2.591-2.091-3.091 1.045-.545 1.682-1.545 1.682-2.864 0-2.318-1.773-4.136-4.591-4.136zm-3.909 5.545v-2.727h3.364c1.182 0 1.909.545 1.909 1.364 0 .909-.727 1.363-1.909 1.363h-3.364zm0 6.091v-3.364h3.636c1.364 0 2.182.636 2.182 1.636 0 1.091-.818 1.728-2.182 1.728h-3.636z"/>
+                    </svg>
+                  )}
+                  {platformKey === 'figma' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 12a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm-6-6a3 3 0 0 1 3-3h3v6H9a3 3 0 0 1-3-3zm0 6a3 3 0 0 1 3-3h3v6H9a3 3 0 0 1-3-3zm0 6a3 3 0 0 1 3-3h3v3a3 3 0 1 1-6 0zm6-12h3a3 3 0 1 1 0 6h-3V6z"/>
+                    </svg>
+                  )}
+                  {platformKey === 'github' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/>
+                    </svg>
+                  )}
+                  {platformKey === 'instagram' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                  )}
+                  {platformKey === 'x' && (
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                  )}
+                  {platformKey === 'medium' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+                    </svg>
+                  )}
+                  {platformKey === 'substack' && (
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+                    </svg>
+                  )}
+                  {platformKey === 'email' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                    </svg>
+                  )}
+                  {platformKey === 'generic' && (
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="2" y1="12" x2="22" y2="12"></line>
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                  )}
+                </a>
+              );
+            })}
+            {email && (
+              <a
+                href={`mailto:${email}`}
+                class="site-footer-icon"
+                title="Send Email"
+                aria-label="Email"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                </svg>
+              </a>
+            )}
+          </div>
+        ) : null}
+
+        <!-- Bottom minimal note directly underneath icons -->
+        <p class="site-footer-copy">
+          Designed with love ◡̈
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

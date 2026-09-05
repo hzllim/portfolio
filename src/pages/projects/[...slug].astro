@@ -1,0 +1,381 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  // Only build pages for published projects
+  return projects
+    .filter((p) => p.data.published !== false)
+    .map((project) => ({
+      params: { slug: project.id },
+      props: { project },
+    }));
+}
+
+let { project } = Astro.props;
+
+if (!project) {
+  const { slug } = Astro.params;
+  const projects = await getCollection('projects');
+  project = projects.find((p) => p.id === slug);
+}
+
+// Redirect if not found or unpublished
+if (!project || project.data.published === false) {
+  return Astro.redirect('/404');
+}
+
+const { Content } = await render(project);
+
+const formattedDate = project.data.date
+  ? new Date(project.data.date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+    })
+  : null;
+---
+
+<Layout
+  title={`${project.data.title} • Hazel`}
+  description={project.data.description}
+>
+  <article class="case-study-article">
+    <!-- Breadcrumb -->
+    <nav class="back-nav">
+      <a href="/" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Back to all work</span>
+      </a>
+    </nav>
+
+    <!-- Case Study Header -->
+    <header class="study-header">
+      <div class="header-meta-row">
+        <span class="category-badge">{project.data.category.toUpperCase()}</span>
+        {formattedDate && <span class="date-badge">{formattedDate}</span>}
+      </div>
+
+      <h1 class="study-title">{project.data.title}</h1>
+
+      {project.data.description && (
+        <p class="study-lead">{project.data.description}</p>
+      )}
+
+      <!-- Metadata summary bar -->
+      <div class="project-meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">Role</span>
+          <span class="meta-val">{project.data.role || 'Product Designer'}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Discipline</span>
+          <span class="meta-val">{project.data.category}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Timeline</span>
+          <span class="meta-val">{formattedDate || 'Ongoing'}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Media Preview -->
+    <div class="hero-media-container">
+      {project.data.coverImage ? (
+        <img src={project.data.coverImage} alt={project.data.title} class="hero-image" />
+      ) : (
+        <div class="hero-mockup-placeholder">
+          <div class="placeholder-graphic">
+            <div class="graphic-bar"></div>
+            <div class="graphic-blocks">
+              <div class="block-elem"></div>
+              <div class="block-elem"></div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+
+    <!-- Case Study Content -->
+    <div class="study-prose">
+      <Content />
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="study-footer-nav">
+      <a href="/" class="bottom-back-btn">&larr; Back to all projects</a>
+      <a href="/contact" class="bottom-contact-btn">Discuss a project &rarr;</a>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .case-study-article {
+    max-width: 760px;
+    margin: 0 auto;
+    padding-top: 1rem;
+  }
+
+  .back-nav {
+    margin-bottom: 2.5rem;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    transition: all 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+    border-color: var(--color-border-hover);
+    transform: translateX(-2px);
+  }
+
+  .study-header {
+    margin-bottom: 3rem;
+  }
+
+  .header-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .category-badge {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-subtle);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+  }
+
+  .date-badge {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+
+  .study-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    color: var(--color-text);
+    margin-bottom: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .study-title {
+      font-size: 3rem;
+    }
+  }
+
+  .study-lead {
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+  }
+
+  .project-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .meta-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .meta-val {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-transform: capitalize;
+  }
+
+  /* Hero Media */
+  .hero-media-container {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    margin-bottom: 3.5rem;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .hero-mockup-placeholder {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F4EFEB;
+    padding: 2rem;
+  }
+
+  .placeholder-graphic {
+    width: 70%;
+    max-width: 380px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 12px 28px -8px rgba(28, 25, 23, 0.08);
+    border: 1px solid rgba(28, 25, 23, 0.06);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .graphic-bar {
+    height: 10px;
+    width: 60%;
+    background: #EFEBE4;
+    border-radius: 5px;
+  }
+
+  .graphic-blocks {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .block-elem {
+    aspect-ratio: 4 / 3;
+    background: #F7F5F0;
+    border-radius: 8px;
+  }
+
+  /* Editorial Prose Typography */
+  .study-prose {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #383431;
+  }
+
+  .study-prose :global(h2) {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .study-prose :global(h3) {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .study-prose :global(p) {
+    margin-bottom: 1.75rem;
+  }
+
+  .study-prose :global(ul),
+  .study-prose :global(ol) {
+    margin-bottom: 2rem;
+    padding-left: 1.5rem;
+  }
+
+  .study-prose :global(li) {
+    margin-bottom: 0.65rem;
+  }
+
+  .study-prose :global(blockquote) {
+    border-left: 3px solid var(--color-text);
+    padding: 0.75rem 0 0.75rem 1.5rem;
+    margin: 2.5rem 0;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--color-text);
+    background: var(--color-surface-subtle);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .study-prose :global(strong) {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .study-prose :global(img) {
+    max-width: 100%;
+    border-radius: var(--radius-md);
+    margin: 2.5rem 0;
+    border: 1px solid var(--color-border);
+  }
+
+  /* Bottom Navigation */
+  .study-footer-nav {
+    margin-top: 4rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .bottom-back-btn {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    transition: color 0.2s ease;
+  }
+
+  .bottom-back-btn:hover {
+    color: var(--color-text);
+  }
+
+  .bottom-contact-btn {
+    font-weight: 600;
+    color: var(--color-text);
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    transition: all 0.2s ease;
+  }
+
+  .bottom-contact-btn:hover {
+    border-color: var(--color-text);
+    background: var(--color-surface-subtle);
+  }
+</style>
