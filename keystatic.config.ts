@@ -17,7 +17,7 @@ export default config({
       },
   cloud: {
     // When you register on https://keystatic.cloud, enter your "user/repo" here
-    project: "your-github-username/your-repo-name",
+    project: "hzllim/portfolio",
   },
   collections: {
     projects: collection({

@@ -9,13 +9,7 @@ const isDev = process.env.NODE_ENV !== "production";
 // https://astro.build/config
 export default defineConfig({
   base: "/",
-  integrations: [
-    react(),
-    markdoc(),
-    // When running locally (`astro dev`), keystatic integration enables local file editing
-    // When building for static GitHub Pages (`astro build`), it exports static HTML
-    ...(isDev ? [keystatic()] : []),
-  ],
+  integrations: [react(), markdoc(), keystatic()],
   redirects: {
     "/admin": "/keystatic",
   },
