@@ -8,8 +8,7 @@ const isDev = process.env.NODE_ENV !== "production";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://hzllim.github.io",
-  base: "/portfolio",
+  base: "/",
   integrations: [
     react(),
     markdoc(),
