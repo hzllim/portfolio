@@ -60,7 +60,7 @@ function getPlatformKey(platform: string = '', url: string = '') {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=block"
       rel="stylesheet"
     />
     <style is:global>
@@ -181,6 +181,14 @@ function getPlatformKey(platform: string = '', url: string = '') {
       .nav-link:hover::after {
         transform: scaleX(1);
         transform-origin: left;
+      }
+
+      .editorial-cue {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        letter-spacing: -0.01em;
+        text-transform: lowercase;
       }
 
       @media (max-width: 640px) {
