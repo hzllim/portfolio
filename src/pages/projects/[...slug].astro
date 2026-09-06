@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
+import { getCategoryLabel } from '../../utils/project-labels';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -35,16 +36,7 @@ const formattedDate = project.data.date
     })
   : null;
 
-const categoryLabels: Record<string, string> = {
-  branding: 'Branding & Identity',
-  'ui-ux': 'UI/UX Design',
-  photography: 'Photography',
-  'web-design': 'Web Design',
-  'graphic-design': 'Graphic Design',
-  other: 'Other',
-};
-
-const disciplineLabel = categoryLabels[project.data.category] || project.data.category;
+const disciplineLabel = getCategoryLabel(project.data.category);
 ---
 
 <Layout
@@ -54,7 +46,7 @@ const disciplineLabel = categoryLabels[project.data.category] || project.data.ca
   <article class="case-study-article">
     <!-- Breadcrumb -->
     <nav class="back-nav">
-      <a href="/" class="back-link">
+      <a href="/" class="editorial-cue back-link">
         <span>&larr; back to all work</span>
       </a>
     </nav>
@@ -123,11 +115,6 @@ const disciplineLabel = categoryLabels[project.data.category] || project.data.ca
   .back-link {
     display: inline-flex;
     align-items: center;
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    letter-spacing: -0.01em;
     transition: color 0.2s ease, transform 0.2s ease;
   }
 
@@ -219,7 +206,7 @@ const disciplineLabel = categoryLabels[project.data.category] || project.data.ca
   .placeholder-graphic {
     width: 70%;
     max-width: 380px;
-    background: #FFFFFF;
+    background: var(--color-surface);
     border-radius: 12px;
     box-shadow: 0 12px 28px -8px rgba(28, 25, 23, 0.08);
     border: 1px solid rgba(28, 25, 23, 0.06);
@@ -252,7 +239,7 @@ const disciplineLabel = categoryLabels[project.data.category] || project.data.ca
   .study-prose {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: #383431;
+    color: var(--color-prose);
   }
 
   .study-prose :global(h2) {

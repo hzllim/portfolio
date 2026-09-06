@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { getCategoryLabel } from '../utils/project-labels';
 
 const allProjects = await getCollection('projects');
 
@@ -25,12 +26,20 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
 <Layout>
   <!-- Hero Statement Section -->
   <section class="hero-section">
-    <h1 class="hero-statement">
-      I'm a product designer who craft digital experiences that turn complexity into clarity, helping users navigate products with confidence and delight.
-    </h1>
-    <div class="hero-subtext">
-      <p>Based in Singapore &bull; Working with global teams across product strategy, design systems, and interaction design.</p>
+    <div class="hero-greeting" role="img" aria-label="Hi, I'm Hazel!">
+      <span class="greeting-slice greeting-hi">
+        <img src="/images/home/hello-hazel.svg" alt="" aria-hidden="true" />
+      </span>
+      <span class="greeting-slice greeting-im">
+        <img src="/images/home/hello-hazel.svg" alt="" aria-hidden="true" />
+      </span>
+      <span class="greeting-slice greeting-hazel">
+        <img src="/images/home/hello-hazel.svg" alt="" aria-hidden="true" />
+      </span>
     </div>
+    <h1 class="hero-statement">
+      I design digital products that make complexity feel simple.
+    </h1>
     <div class="editorial-cue hero-scroll-cue">
       <span>Selected work &darr;</span>
     </div>
@@ -66,7 +75,7 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
           </div>
           <div class="featured-content">
             <div class="meta-row">
-              <span class="project-category">{featuredProject.data.category}</span>
+              <span class="project-category">{getCategoryLabel(featuredProject.data.category)}</span>
               {featuredProject.data.date && (
                 <span class="project-year">
                   {new Date(featuredProject.data.date).getFullYear()}
@@ -103,7 +112,7 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
               </div>
               <div class="grid-content">
                 <div class="meta-row">
-                  <span class="project-category">{project.data.category}</span>
+                  <span class="project-category">{getCategoryLabel(project.data.category)}</span>
                   {project.data.date && (
                     <span class="project-year">
                       {new Date(project.data.date).getFullYear()}
@@ -129,6 +138,63 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
     padding: 2.5rem 0 4.5rem;
   }
 
+  .hero-greeting {
+    display: flex;
+    width: 223px;
+    height: 39px;
+    margin-bottom: 1.25rem;
+  }
+
+  .greeting-slice {
+    position: relative;
+    height: 39px;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+    animation: reveal-greeting 4.8s ease-in-out infinite;
+  }
+
+  .greeting-slice img {
+    position: absolute;
+    top: 0;
+    width: 223px;
+    height: 39px;
+    max-width: none;
+  }
+
+  .greeting-hi {
+    width: 58px;
+  }
+
+  .greeting-im {
+    width: 42px;
+    animation-delay: 0.45s;
+  }
+
+  .greeting-im img {
+    left: -58px;
+  }
+
+  .greeting-hazel {
+    width: 123px;
+    animation-delay: 0.9s;
+  }
+
+  .greeting-hazel img {
+    left: -100px;
+  }
+
+  @keyframes reveal-greeting {
+    0%, 8% {
+      clip-path: inset(0 100% 0 0);
+    }
+    18%, 76% {
+      clip-path: inset(0 0 0 0);
+    }
+    88%, 100% {
+      clip-path: inset(0 100% 0 0);
+    }
+  }
+
   .hero-statement {
     font-size: 2.25rem;
     font-weight: 700;
@@ -139,29 +205,28 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
   }
 
   .hero-scroll-cue {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--color-text-secondary);
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    text-transform: lowercase;
-    letter-spacing: -0.01em;
   }
 
   @media (min-width: 640px) {
+    .hero-greeting {
+      width: 223px;
+      height: 39px;
+    }
+
     .hero-statement {
       font-size: 2.75rem;
       line-height: 1.3;
     }
   }
 
-  .hero-subtext {
-    font-size: 1.05rem;
-    color: var(--color-text-muted);
-    max-width: 60ch;
-    line-height: 1.6;
-    margin-bottom: 3.5rem;
+  @media (prefers-reduced-motion: reduce) {
+    .greeting-slice {
+      clip-path: inset(0 0 0 0);
+      animation: none;
+    }
   }
 
   /* Featured Project Hero Card (Option C) */
@@ -256,7 +321,7 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
 
   .featured-card:hover .featured-title,
   .grid-card:hover .grid-title {
-    color: #0F172A;
+    color: var(--color-accent);
   }
 
   .featured-desc {
@@ -369,7 +434,7 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
   .device-mockup {
     width: 78%;
     max-width: 420px;
-    background: #FFFFFF;
+    background: var(--color-surface);
     border-radius: 12px;
     border: 1px solid rgba(28, 25, 23, 0.08);
     box-shadow: 0 12px 24px -8px rgba(28, 25, 23, 0.08);
@@ -439,7 +504,7 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
     flex-direction: column;
     gap: 0.5rem;
     padding: 1.25rem;
-    background: #FFFFFF;
+    background: var(--color-surface);
     border-radius: 8px;
     box-shadow: 0 6px 16px -6px rgba(28, 25, 23, 0.06);
     border: 1px solid rgba(28, 25, 23, 0.06);
