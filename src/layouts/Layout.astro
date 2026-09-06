@@ -129,13 +129,9 @@ function getPlatformKey(platform: string = '', url: string = '') {
         max-width: var(--max-width);
         margin: 0 auto;
         padding: 1.35rem 1.5rem;
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
+        display: flex;
         align-items: center;
-      }
-
-      .nav-brand {
-        justify-self: start;
+        justify-content: center;
       }
 
       .brand-title {
@@ -152,17 +148,6 @@ function getPlatformKey(platform: string = '', url: string = '') {
         gap: 1.75rem;
       }
 
-      .nav-link {
-        position: relative;
-        font-size: 0.78rem;
-        font-weight: 500;
-        color: var(--color-text-secondary);
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        transition: color 0.2s ease;
-      }
-
-      .nav-link:hover {
         color: var(--color-text);
       }
 
@@ -198,10 +183,6 @@ function getPlatformKey(platform: string = '', url: string = '') {
           flex-direction: column;
           gap: 0.85rem;
           padding: 1.15rem 1.25rem;
-        }
-
-        .nav-brand {
-          justify-self: auto;
         }
 
         .nav-links {
@@ -274,9 +255,6 @@ function getPlatformKey(platform: string = '', url: string = '') {
   <body>
     <header class="site-header">
       <div class="nav-container">
-        <a href="/" class="nav-brand">
-          <span class="brand-title">{authorName}</span>
-        </a>
         <nav class="nav-links">
           <a href="/" class="nav-link">Work</a>
           <a href="/about" class="nav-link">About</a>
