@@ -44,21 +44,12 @@ const formattedDate = project.data.date
     <!-- Breadcrumb -->
     <nav class="back-nav">
       <a href="/" class="back-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        <span>Back to all work</span>
+        <span>&larr; back to all work</span>
       </a>
     </nav>
 
     <!-- Case Study Header -->
     <header class="study-header">
-      <div class="header-meta-row">
-        <span class="category-badge">{project.data.category.toUpperCase()}</span>
-        {formattedDate && <span class="date-badge">{formattedDate}</span>}
-      </div>
-
       <h1 class="study-title">{project.data.title}</h1>
 
       {project.data.description && (
@@ -104,11 +95,6 @@ const formattedDate = project.data.date
       <Content />
     </div>
 
-    <!-- Bottom Navigation -->
-    <div class="study-footer-nav">
-      <a href="/" class="bottom-back-btn">&larr; Back to all projects</a>
-      <a href="/contact" class="bottom-contact-btn">Discuss a project &rarr;</a>
-    </div>
   </article>
 </Layout>
 
@@ -126,49 +112,21 @@ const formattedDate = project.data.date
   .back-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
     font-weight: 500;
     color: var(--color-text-secondary);
-    padding: 0.4rem 0.75rem;
-    border-radius: var(--radius-pill);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    transition: all 0.2s ease;
+    letter-spacing: -0.01em;
+    transition: color 0.2s ease, transform 0.2s ease;
   }
 
   .back-link:hover {
     color: var(--color-text);
-    border-color: var(--color-border-hover);
     transform: translateX(-2px);
   }
 
   .study-header {
     margin-bottom: 3rem;
-  }
-
-  .header-meta-row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .category-badge {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    padding: 0.25rem 0.6rem;
-    border-radius: var(--radius-pill);
-    background: var(--color-surface-subtle);
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border);
-  }
-
-  .date-badge {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
   }
 
   .study-title {
@@ -342,40 +300,4 @@ const formattedDate = project.data.date
     border: 1px solid var(--color-border);
   }
 
-  /* Bottom Navigation */
-  .study-footer-nav {
-    margin-top: 4rem;
-    padding-top: 2.5rem;
-    border-top: 1px solid var(--color-border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .bottom-back-btn {
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    transition: color 0.2s ease;
-  }
-
-  .bottom-back-btn:hover {
-    color: var(--color-text);
-  }
-
-  .bottom-contact-btn {
-    font-weight: 600;
-    color: var(--color-text);
-    padding: 0.6rem 1.2rem;
-    border-radius: var(--radius-pill);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    transition: all 0.2s ease;
-  }
-
-  .bottom-contact-btn:hover {
-    border-color: var(--color-text);
-    background: var(--color-surface-subtle);
-  }
 </style>

@@ -14,7 +14,6 @@ const authorName = aboutData?.name || 'Hazel';
 >
   <div class="contact-wrapper">
     <header class="contact-header">
-      <span class="contact-pill">Get in touch</span>
       <h1 class="contact-title">Let's build something thoughtful.</h1>
       <p class="contact-subtext">
         Whether you have a new project, design advisory needs, or just want to chat about product design, my inbox is open.
@@ -29,49 +28,6 @@ const authorName = aboutData?.name || 'Hazel';
           {contactEmail} &rarr;
         </a>
       </div>
-
-      <div class="divider">
-        <span>or drop a message below</span>
-      </div>
-
-      <!-- Free Form Endpoint via Web3Forms (zero backend) -->
-      <form
-        action="https://api.web3forms.com/submit"
-        method="POST"
-        class="inquiry-form"
-      >
-        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
-        <input type="hidden" name="subject" value="New Portfolio Inquiry from Hazel's Site" />
-        <input type="checkbox" name="botcheck" style="display: none;" />
-
-        <div class="form-row">
-          <div class="form-field">
-            <label for="name">Your Name</label>
-            <input type="text" id="name" name="name" required placeholder="Alex Tan" />
-          </div>
-          <div class="form-field">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required placeholder="alex@company.com" />
-          </div>
-        </div>
-
-        <div class="form-field">
-          <label for="message">Project Overview</label>
-          <textarea
-            id="message"
-            name="message"
-            rows="5"
-            required
-            placeholder="Tell me a bit about your product, timeline, and goals..."
-          ></textarea>
-        </div>
-
-        <button type="submit" class="submit-btn">Send Message &rarr;</button>
-
-        <p class="form-footer-note">
-          Forms are powered by free static endpoints (e.g. Web3Forms or Formspree). Enter your free key in <code>src/pages/contact.astro</code> to receive emails directly.
-        </p>
-      </form>
     </div>
   </div>
 </Layout>
@@ -85,19 +41,6 @@ const authorName = aboutData?.name || 'Hazel';
 
   .contact-header {
     margin-bottom: 2.75rem;
-  }
-
-  .contact-pill {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    font-weight: 500;
-    padding: 0.25rem 0.65rem;
-    border-radius: var(--radius-pill);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    color: var(--color-text-secondary);
-    margin-bottom: 1.25rem;
   }
 
   .contact-title {
@@ -150,109 +93,5 @@ const authorName = aboutData?.name || 'Hazel';
     font-weight: 700;
     color: var(--color-text);
     letter-spacing: -0.01em;
-  }
-
-  .divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    color: var(--color-text-muted);
-    font-size: 0.85rem;
-    gap: 1rem;
-  }
-
-  .divider::before,
-  .divider::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .inquiry-form {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-
-  @media (min-width: 640px) {
-    .form-row {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-  }
-
-  label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--color-text);
-  }
-
-  input,
-  textarea {
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    padding: 0.75rem 1rem;
-    color: var(--color-text);
-    font-family: inherit;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-  }
-
-  input:focus,
-  textarea:focus {
-    outline: none;
-    border-color: var(--color-text);
-    background: #FFFFFF;
-    box-shadow: 0 0 0 3px rgba(28, 25, 23, 0.05);
-  }
-
-  .submit-btn {
-    align-self: flex-start;
-    padding: 0.75rem 1.6rem;
-    border-radius: var(--radius-pill);
-    background: var(--color-text);
-    color: var(--color-bg);
-    border: none;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-top: 0.5rem;
-  }
-
-  .submit-btn:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-  }
-
-  .form-footer-note {
-    font-size: 0.78rem;
-    color: var(--color-text-muted);
-    line-height: 1.5;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .form-footer-note code {
-    font-family: var(--font-mono);
-    background: var(--color-surface-subtle);
-    padding: 0.15rem 0.35rem;
-    border-radius: 4px;
   }
 </style>

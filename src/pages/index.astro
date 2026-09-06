@@ -25,10 +25,6 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
 <Layout>
   <!-- Hero Statement Section -->
   <section class="hero-section">
-    <div class="hero-badge">
-      <span class="status-dot"></span>
-      <span>Available for select projects</span>
-    </div>
     <h1 class="hero-statement">
       I'm a product designer who craft digital experiences that turn complexity into clarity, helping users navigate products with confidence and delight.
     </h1>
@@ -67,13 +63,12 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
                 </div>
               </div>
             )}
-            <span class="hover-pill">View case study &rarr;</span>
           </div>
           <div class="featured-content">
             <div class="meta-row">
-              <span class="tag-pill">{featuredProject.data.category.toUpperCase()}</span>
+              <span class="project-category">{featuredProject.data.category}</span>
               {featuredProject.data.date && (
-                <span class="date-tag">
+                <span class="project-year">
                   {new Date(featuredProject.data.date).getFullYear()}
                 </span>
               )}
@@ -82,13 +77,6 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
             {featuredProject.data.description && (
               <p class="featured-desc">{featuredProject.data.description}</p>
             )}
-            <span class="view-link">
-              <span>Read case study</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </span>
           </div>
         </a>
       </div>
@@ -112,13 +100,12 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
                     </div>
                   </div>
                 )}
-                <span class="hover-pill">Read &rarr;</span>
               </div>
               <div class="grid-content">
                 <div class="meta-row">
-                  <span class="tag-pill">{project.data.category.toUpperCase()}</span>
+                  <span class="project-category">{project.data.category}</span>
                   {project.data.date && (
-                    <span class="date-tag">
+                    <span class="project-year">
                       {new Date(project.data.date).getFullYear()}
                     </span>
                   )}
@@ -127,9 +114,6 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
                 {project.data.description && (
                   <p class="grid-desc">{project.data.description}</p>
                 )}
-                <span class="view-link-sm">
-                  <span>View project &rarr;</span>
-                </span>
               </div>
             </a>
           );
@@ -145,29 +129,6 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
     padding: 2.5rem 0 4.5rem;
   }
 
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    padding: 0.35rem 0.85rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-pill);
-    font-size: 0.825rem;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    margin-bottom: 2rem;
-  }
-
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #10B981;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-    display: inline-block;
-  }
-
   .hero-statement {
     font-size: 2.25rem;
     font-weight: 700;
@@ -175,6 +136,17 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
     letter-spacing: -0.03em;
     color: var(--color-text);
     margin-bottom: 1.5rem;
+  }
+
+  .hero-scroll-cue {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-transform: lowercase;
+    letter-spacing: -0.01em;
   }
 
   @media (min-width: 640px) {
@@ -190,17 +162,6 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
     max-width: 60ch;
     line-height: 1.6;
     margin-bottom: 3.5rem;
-  }
-
-  .hero-scroll-cue {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--color-text-secondary);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    text-transform: lowercase;
-    letter-spacing: -0.01em;
   }
 
   /* Featured Project Hero Card (Option C) */
@@ -252,28 +213,6 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
     transform: scale(1.02);
   }
 
-  .hover-pill {
-    position: absolute;
-    bottom: 1.25rem;
-    right: 1.25rem;
-    background: rgba(28, 25, 23, 0.88);
-    color: #FFFFFF;
-    font-size: 0.825rem;
-    font-weight: 500;
-    padding: 0.45rem 0.95rem;
-    border-radius: var(--radius-pill);
-    backdrop-filter: blur(8px);
-    opacity: 0;
-    transform: translateY(6px);
-    transition: all 0.25s ease;
-  }
-
-  .featured-card:hover .hover-pill,
-  .grid-card:hover .hover-pill {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
   .featured-content {
     padding: 2.25rem;
     display: flex;
@@ -294,21 +233,16 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
     margin-bottom: 0.25rem;
   }
 
-  .tag-pill {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    padding: 0.25rem 0.6rem;
-    border-radius: var(--radius-pill);
-    background: var(--color-surface-subtle);
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border);
-  }
-
-  .date-tag {
+  .project-category,
+  .project-year {
     font-family: var(--font-mono);
     font-size: 0.8rem;
     color: var(--color-text-muted);
+  }
+
+  .project-category {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 
   .featured-title {
@@ -330,21 +264,6 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
     color: var(--color-text-secondary);
     line-height: 1.6;
     max-width: 68ch;
-  }
-
-  .view-link {
-    margin-top: 0.75rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--color-text);
-    transition: gap 0.2s ease;
-  }
-
-  .featured-card:hover .view-link {
-    gap: 0.75rem;
   }
 
   /* Secondary 2-Column Grid */
@@ -418,19 +337,6 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
     font-size: 0.925rem;
     color: var(--color-text-secondary);
     line-height: 1.55;
-  }
-
-  .view-link-sm {
-    margin-top: auto;
-    padding-top: 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    transition: color 0.2s ease;
-  }
-
-  .grid-card:hover .view-link-sm {
-    color: var(--color-text);
   }
 
   /* Tactile Tint Palettes inspired by Buzz Usborne */

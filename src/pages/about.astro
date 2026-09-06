@@ -27,7 +27,7 @@ const { Content } = about ? await render(about) : { Content: null };
       <div class="hero-titles">
         <h1 class="about-name">{about?.data.name || 'Hazel'}</h1>
         <p class="about-tagline">{about?.data.tagline || 'Product Designer'}</p>
-        <p class="about-loc">📍 Based in Singapore &bull; Working globally</p>
+        <p class="about-loc">Based in Singapore &bull; Working globally</p>
       </div>
     </header>
 
@@ -66,24 +66,6 @@ const { Content } = about ? await render(about) : { Content: null };
       </div>
     </section>
 
-    <!-- Connect / Links -->
-    <section class="connect-section">
-      <h2 class="section-heading">Connect</h2>
-      <p class="connect-text">Feel free to reach out for advisory, design leadership, or project inquiries.</p>
-      <div class="connect-buttons">
-        {about?.data.email && (
-          <a href={`mailto:${about.data.email}`} class="connect-pill primary">Say Hello &rarr;</a>
-        )}
-        {about?.data.socialLinks && about.data.socialLinks.map((link) => {
-          const href = link.url.startsWith('http://') || link.url.startsWith('https://') || link.url.startsWith('mailto:') ? link.url : `https://${link.url}`;
-          return (
-            <a href={href} target="_blank" rel="noopener noreferrer" class="connect-pill">
-              {link.platform} ↗
-            </a>
-          );
-        })}
-      </div>
-    </section>
   </div>
 </Layout>
 
@@ -169,7 +151,7 @@ const { Content } = about ? await render(about) : { Content: null };
   .experience-section {
     padding-top: 2.5rem;
     border-top: 1px solid var(--color-border);
-    margin-bottom: 3.5rem;
+    margin-bottom: 0;
   }
 
   .section-heading {
@@ -216,47 +198,4 @@ const { Content } = about ? await render(about) : { Content: null };
     line-height: 1.6;
   }
 
-  /* Connect Section */
-  .connect-section {
-    padding-top: 2.5rem;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .connect-text {
-    font-size: 1.05rem;
-    color: var(--color-text-secondary);
-    margin-bottom: 1.5rem;
-  }
-
-  .connect-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.85rem;
-  }
-
-  .connect-pill {
-    padding: 0.6rem 1.25rem;
-    border-radius: var(--radius-pill);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--color-text);
-    transition: all 0.2s ease;
-  }
-
-  .connect-pill:hover {
-    border-color: var(--color-text);
-    transform: translateY(-2px);
-  }
-
-  .connect-pill.primary {
-    background: var(--color-text);
-    color: var(--color-bg);
-    border-color: var(--color-text);
-  }
-
-  .connect-pill.primary:hover {
-    opacity: 0.92;
-  }
 </style>
