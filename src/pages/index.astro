@@ -28,13 +28,19 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
   <section class="hero-section">
     <div class="hero-greeting" role="img" aria-label="Hi, I'm Hazel!">
       <span class="greeting-slice greeting-hi">
-        <img src="/images/home/hello-hazel.svg" alt="" aria-hidden="true" />
+        <span class="greeting-reveal">
+          <img src="/images/home/hello-hazel.svg" alt="" aria-hidden="true" />
+        </span>
       </span>
       <span class="greeting-slice greeting-im">
-        <img src="/images/home/hello-hazel.svg" alt="" aria-hidden="true" />
+        <span class="greeting-reveal">
+          <img src="/images/home/hello-hazel.svg" alt="" aria-hidden="true" />
+        </span>
       </span>
       <span class="greeting-slice greeting-hazel">
-        <img src="/images/home/hello-hazel.svg" alt="" aria-hidden="true" />
+        <span class="greeting-reveal">
+          <img src="/images/home/hello-hazel.svg" alt="" aria-hidden="true" />
+        </span>
       </span>
     </div>
     <h1 class="hero-statement">
@@ -149,7 +155,14 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
     position: relative;
     height: 39px;
     overflow: hidden;
-    clip-path: inset(0 100% 0 0);
+  }
+
+  .greeting-reveal {
+    display: block;
+    position: relative;
+    width: 0;
+    height: 39px;
+    overflow: hidden;
     animation: reveal-greeting 4.8s ease-in-out infinite;
   }
 
@@ -166,7 +179,10 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
   }
 
   .greeting-im {
-    width: 42px;
+    width: 62px;
+  }
+
+  .greeting-im .greeting-reveal {
     animation-delay: 0.45s;
   }
 
@@ -175,23 +191,26 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
   }
 
   .greeting-hazel {
-    width: 123px;
+    width: 103px;
+  }
+
+  .greeting-hazel .greeting-reveal {
     animation-delay: 0.9s;
   }
 
   .greeting-hazel img {
-    left: -100px;
+    left: -120px;
   }
 
   @keyframes reveal-greeting {
     0%, 8% {
-      clip-path: inset(0 100% 0 0);
+      width: 0;
     }
     18%, 76% {
-      clip-path: inset(0 0 0 0);
+      width: 100%;
     }
     88%, 100% {
-      clip-path: inset(0 100% 0 0);
+      width: 0;
     }
   }
 
@@ -223,8 +242,8 @@ const tintThemes = ['tint-clay', 'tint-sage', 'tint-slate', 'tint-warm'];
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .greeting-slice {
-      clip-path: inset(0 0 0 0);
+    .greeting-reveal {
+      width: 100%;
       animation: none;
     }
   }
