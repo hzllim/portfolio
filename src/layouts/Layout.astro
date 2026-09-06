@@ -134,13 +134,6 @@ function getPlatformKey(platform: string = '', url: string = '') {
         justify-content: center;
       }
 
-      .brand-title {
-        font-size: 1.05rem;
-        font-weight: 600;
-        letter-spacing: -0.02em;
-        color: var(--color-text);
-      }
-
       .nav-links {
         display: flex;
         align-items: center;
@@ -148,6 +141,17 @@ function getPlatformKey(platform: string = '', url: string = '') {
         gap: 1.75rem;
       }
 
+      .nav-link {
+        position: relative;
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        transition: color 0.2s ease;
+      }
+
+      .nav-link:hover {
         color: var(--color-text);
       }
 
