@@ -34,6 +34,17 @@ const formattedDate = project.data.date
       month: 'short',
     })
   : null;
+
+const categoryLabels: Record<string, string> = {
+  branding: 'Branding & Identity',
+  'ui-ux': 'UI/UX Design',
+  photography: 'Photography',
+  'web-design': 'Web Design',
+  'graphic-design': 'Graphic Design',
+  other: 'Other',
+};
+
+const disciplineLabel = categoryLabels[project.data.category] || project.data.category;
 ---
 
 <Layout
@@ -64,7 +75,7 @@ const formattedDate = project.data.date
         </div>
         <div class="meta-item">
           <span class="meta-label">Discipline</span>
-          <span class="meta-val">{project.data.category}</span>
+          <span class="meta-val">{disciplineLabel}</span>
         </div>
         <div class="meta-item">
           <span class="meta-label">Timeline</span>
@@ -178,7 +189,6 @@ const formattedDate = project.data.date
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--color-text);
-    text-transform: capitalize;
   }
 
   /* Hero Media */
